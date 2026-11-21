@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Version>1.4.8</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Web/*" LogicalName="VodWeb.%(Filename)%(Extension)" />
+    <EmbeddedResource Include="Artwork/Banner.jpg" LogicalName="VodArtwork.Banner.jpg" />
+    <PackageReference Include="System.Memory" Version="4.5.5" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="MediaBrowser.Server.Core" Version="4.8.11" PrivateAssets="all" ExcludeAssets="runtime" />
+  </ItemGroup>
+</Project>

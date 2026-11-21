@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Video on Demand</title>
+<link rel="stylesheet" href="Assets/catalog.css">
+<link rel="stylesheet" href="../Branding/Css">
+<script defer src="Assets/catalog.js?v=1.4.7"></script>
+</head>
+<body class="emby-vod">
+<header class="masthead skinHeader"><a class="brand" href="Browse">Video on Demand</a><a id="emby-home" href="../web/index.html">Open Emby ↗</a></header>
+<main>
+  <details id="refresh-panel" hidden>
+    <summary>Catalog status <span id="refresh-phase"></span></summary>
+    <p id="refresh-counts"></p>
+    <p id="last-refresh"></p>
+    <p id="refresh-help"></p>
+    <p>To hide the channel from Home rows, edit each row’s Libraries in your Emby Home Screen settings.</p>
+  </details>
+  <section id="intro">
+    <div class="hero-art" id="hero-art" aria-hidden="true"></div>
+    <div class="hero-copy">
+      <h1>Video on Demand</h1>
+      <form id="search" role="search"><label for="query">Search the VoD catalog</label><div class="search-row"><input type="search" id="query" placeholder="Enter a title" maxlength="120"><button class="emby-button button-submit">Search</button></div></form>
+    </div>
+  </section>
+  <nav id="collections" aria-label="Catalog"><button id="movies" type="button">Movies</button><button id="tv" type="button">TV Shows</button></nav>
+  <section aria-labelledby="heading" id="catalog">
+    <div class="toolbar">
+      <div><div id="location" aria-label="Location"></div><h2 id="heading" tabindex="-1">Movies</h2></div>
+      <div class="list-controls">
+        <label id="sort-control">Sort by <select id="sort">
+          <option value="popularity">Popularity</option>
+          <option value="rating">Highest rated</option>
+          <option value="added">Recently added</option>
+          <option value="new">Release date · newest</option>
+          <option value="old">Release date · oldest</option>
+          <option value="title">Title · A–Z</option>
+          <option value="title-desc">Title · Z–A</option>
+        </select></label>
+        <label>Results per page <select id="page-size"><option value="20">20</option><option value="50">50</option><option value="100">100</option></select></label>
+      </div>
+    </div>
+    <div id="show-details" hidden></div>
+    <p id="status" role="status"></p>
+    <div id="grid" class="grid"></div>
+    <nav id="pager" aria-label="Results pages" hidden><button id="previous">← Previous</button><span id="page"></span><button id="next">Next →</button></nav>
+  </section>
+</main>
+<dialog id="details"><button id="close" aria-label="Close details">×</button><div id="detail-body"></div></dialog>
+<template id="card"><button type="button" class="card"><span class="art"><img alt="" hidden><span aria-hidden="true"></span></span><span class="label"></span><span class="sub"></span></button></template>
+</body>
+</html>
