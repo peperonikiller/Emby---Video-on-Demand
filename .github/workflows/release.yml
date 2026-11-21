@@ -1,0 +1,53 @@
+name: Build and release Emby VoD
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/release.yml
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: emby-vod-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          dotnet-version: '8.0.x'
+      - name: Build plugin
+        run: dotnet build EmbyVideoOnDemand.csproj --configuration Release
+      - name: Publish DLL to GitHub Releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version="$(dotnet msbuild EmbyVideoOnDemand.csproj -nologo -getProperty:Version)"
+          tag="v${version}"
+          if [[ "$GITHUB_REF_TYPE" == "tag" && "$GITHUB_REF_NAME" != "$tag" ]]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match project version $version."
+            exit 1
+          fi
+
+          asset="bin/Release/netstandard2.0/EmbyVideoOnDemand.dll"
+          test -s "$asset"
+          if gh release view "$tag" --json assets >/dev/null 2>&1; then
+            if gh release view "$tag" --json assets --jq '.assets[].name' | grep -Fxq 'EmbyVideoOnDemand.dll'; then
+              echo "Release $tag already contains the DLL."
+            else
+              gh release upload "$tag" "$asset"
+            fi
+          else
+            gh release create "$tag" "$asset" --target "$GITHUB_SHA" --title "Video On Demand $tag" --generate-notes
+          fi
